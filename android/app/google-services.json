@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "466912463502",
+    "project_id": "anix-b211f",
+    "storage_bucket": "anix-b211f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:466912463502:android:1158fb3d043ec350e557df",
+        "android_client_info": {
+          "package_name": "com.example.aniX"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDof21lHoGJsdfv5LEowSAxgnHk_OZGWsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:466912463502:android:86f63ecb2e8ebb72e557df",
+        "android_client_info": {
+          "package_name": "com.example.anix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDof21lHoGJsdfv5LEowSAxgnHk_OZGWsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
