@@ -21,6 +21,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String? cpasswordError;
   String? errorMessage;
   bool isLoading = false;
+  bool isGoogleLoading = false;
 
   final authService = AuthService();
   final dbService = Database(uid: '');
@@ -105,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
 
       if (success) {
-        context.go('/home');
+        context.go('/login');
       }
     } on AuthException catch (e) {
       setState(() {
@@ -114,6 +115,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } finally {
       setState(() {
         isLoading = false;
+      });
+    }
+  }
+
+  Future<void> handleGoogleSignIn() async {
+    setState(() {
+      isGoogleLoading = true;
+    });
+
+    try {
+      final userCredential = await authService.signInWithGoogle(
+        context: context,
+      );
+
+      if (userCredential != null) {
+        context.go('/home');
+      }
+    } catch (e) {
+      print('Google sign-in error: $e');
+    } finally {
+      setState(() {
+        isGoogleLoading = false;
       });
     }
   }
@@ -248,6 +271,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: () => context.go('/login'),
                     ),
                   ],
+                ),
+                Container(
+                  child: ElevatedButton(
+                    onPressed: () => handleGoogleSignIn(),
+                    child: const Text('Sign Up with Google'),
+                  ),
                 ),
               ],
             ),

@@ -2,6 +2,8 @@ import 'package:anix/services/customToast.dart';
 import 'package:anix/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthException implements Exception {
   final String message;
@@ -15,8 +17,13 @@ class AuthService {
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  Future<void> signOut() async {
+  Future<void> signOut({required BuildContext context}) async {
+    if (_auth.currentUser != null) {
+      final db = Database(uid: _auth.currentUser!.uid);
+      await db.updateUserStatus(isOnline: false);
+    }
     await _auth.signOut();
+    context.go("/login");
   }
 
   Future<bool> createUserWithEmailAndPassword({
@@ -74,15 +81,83 @@ class AuthService {
     }
   }
 
-  signInWithEmailAndPassword(String email, String password) async {
+  Future<bool> signInWithEmailAndPassword({
+    required BuildContext context,
+    required String email,
+    required String password,
+  }) async {
     try {
+      print(password);
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+
+      if (_auth.currentUser != null) {
+        final db = Database(uid: _auth.currentUser!.uid);
+        await db.updateUserStatus(isOnline: true);
       }
+
+      ToastService.showToast(
+        context,
+        message: 'Login successful!',
+        isError: false,
+      );
+
+      return true;
+    } on FirebaseAuthException catch (e) {
+      String errorMessage;
+
+      switch (e.code) {
+        case 'user-not-found':
+          errorMessage = 'No user found for that email';
+          break;
+        case 'wrong-password':
+          errorMessage = 'Incorrect password';
+          break;
+        case 'user-disabled':
+          errorMessage = 'This account has been disabled';
+          break;
+        case 'invalid-email':
+          errorMessage = 'Invalid email address';
+          break;
+        case 'too-many-requests':
+          errorMessage = 'Too many failed login attempts. Try again later';
+          break;
+        default:
+          errorMessage = 'Failed to sign in';
+      }
+
+      ToastService.showToast(context, message: errorMessage, isError: true);
+
+      return false;
+    } catch (e) {
+      ToastService.showToast(
+        context,
+        message: 'An unexpected error occurred',
+        isError: true,
+      );
+
+      return false;
     }
+  }
+
+  signInWithGoogle({required BuildContext context}) async {
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+      scopes: ['email'],
+      signInOption: SignInOption.standard, // Forces the account picker to show
+      forceCodeForRefreshToken: true,
+    );
+
+    // When signing in
+    await googleSignIn.signOut(); // Force sign out first
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser!.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    return await _auth.signInWithCredential(credential);
   }
 }

@@ -46,4 +46,15 @@ class Database {
       throw Exception('Failed to check username availability: $e');
     }
   }
+
+  Future<void> updateUserStatus({required bool isOnline}) async {
+    try {
+      await userCollection.doc(uid).update({
+        'isOnline': isOnline,
+        'lastActive': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      throw Exception('Failed to update user status: $e');
+    }
+  }
 }
