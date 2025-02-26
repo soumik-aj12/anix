@@ -11,18 +11,43 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      appBar: AppBar(
+        title: Text('aniX', style: TextStyle(fontWeight: FontWeight.bold)),
+        actions: [
+          CircleAvatar(backgroundImage: NetworkImage(_auth.user!.photoURL!)),
+          SizedBox(width: 20),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Home'),
-            Text(_auth.user!.email!),
-            ElevatedButton(
-              onPressed: () => _auth.signOut(context: context),
-              child: Text('Logout'),
-            ),
+            SearchBar(),
+            const SizedBox(height: 20),
+            SectionTitle(title: 'Continue Watching'),
+            // AnimeList(),
+            SectionTitle(title: 'Trending now'),
+            // TrendingAnimeList(),
+            SectionTitle(title: 'Activity Feed'),
+            // ActivityFeed(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class SectionTitle extends StatelessWidget {
+  final String title;
+  SectionTitle({required this.title});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Text(
+        title,
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
     );
   }

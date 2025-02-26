@@ -119,28 +119,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  Future<void> handleGoogleSignIn() async {
-    setState(() {
-      isGoogleLoading = true;
-    });
-
-    try {
-      final userCredential = await authService.signInWithGoogle(
-        context: context,
-      );
-
-      if (userCredential != null) {
-        context.go('/home');
-      }
-    } catch (e) {
-      print('Google sign-in error: $e');
-    } finally {
-      setState(() {
-        isGoogleLoading = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -271,12 +249,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: () => context.go('/login'),
                     ),
                   ],
-                ),
-                Container(
-                  child: ElevatedButton(
-                    onPressed: () => handleGoogleSignIn(),
-                    child: const Text('Sign Up with Google'),
-                  ),
                 ),
               ],
             ),

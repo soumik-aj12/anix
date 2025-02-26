@@ -140,24 +140,44 @@ class AuthService {
   }
 
   signInWithGoogle({required BuildContext context}) async {
-    final GoogleSignIn googleSignIn = GoogleSignIn(
-      scopes: ['email'],
-      signInOption: SignInOption.standard, // Forces the account picker to show
-      forceCodeForRefreshToken: true,
-    );
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: ['email'],
+        signInOption:
+            SignInOption.standard, // Forces the account picker to show
+        forceCodeForRefreshToken: true,
+      );
 
-    // When signing in
-    await googleSignIn.signOut(); // Force sign out first
-    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      // When signing in
+      await googleSignIn.signOut();
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser!.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser!.authentication;
 
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      final userCredential = await _auth.signInWithCredential(credential);
+      if (_auth.currentUser != null) {
+        final db = Database(uid: _auth.currentUser!.uid);
+        await db.updateUserStatus(isOnline: true);
+      }
+      ToastService.showToast(
+        context,
+        message: 'Login successful!',
+        isError: false,
+      );
+      return userCredential;
+    } catch (e) {
+      ToastService.showToast(
+        context,
+        message: 'An unexpected error occurred',
+        isError: true,
+      );
 
-    return await _auth.signInWithCredential(credential);
+      return null;
+    }
   }
 }
