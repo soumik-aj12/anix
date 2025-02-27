@@ -1,4 +1,6 @@
 import 'package:anix/services/auth.dart';
+import 'package:anix/ui/Home/CurrentlyWatching.dart';
+import 'package:anix/ui/Home/Trending.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -26,9 +28,9 @@ class _HomeScreenState extends State<HomeScreen> {
             SearchBar(),
             const SizedBox(height: 20),
             SectionTitle(title: 'Continue Watching'),
-            // AnimeList(),
+            CurrentlyWatchingAnimeList(),
             SectionTitle(title: 'Trending now'),
-            // TrendingAnimeList(),
+            Trending(),
             SectionTitle(title: 'Activity Feed'),
             // ActivityFeed(),
           ],
