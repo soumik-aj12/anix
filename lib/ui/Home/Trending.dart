@@ -42,7 +42,7 @@ class _TrendingState extends State<Trending> {
           List<dynamic> data = snapshot.data!;
           return ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: data.length,
+            itemCount: 8,
             itemBuilder: (context, index) {
               var anime = data[index];
               String title =
