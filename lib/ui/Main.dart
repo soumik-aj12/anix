@@ -1,4 +1,5 @@
 import 'package:anix/services/auth.dart';
+import 'package:anix/ui/Discover/Discover.dart';
 import 'package:anix/ui/Home/Home.dart';
 import 'package:anix/ui/Profile/Profile.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,7 @@ class _MainScreenState extends State<MainScreen> {
           // Home Page
           HomeScreen(),
           // Users Page
-          Center(child: Text('Messages Page')),
+          DiscoverScreen(),
           // Messages Page
           Center(child: Text('Messages Page')),
           // Settings Page
@@ -83,23 +84,23 @@ class _MainScreenState extends State<MainScreen> {
         },
         items: [
           BottomNavyBarItem(
-            icon: Icon(Icons.apps),
+            icon: Icon(Icons.home),
             title: Text('Home'),
             activeColor: Colors.red,
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.people),
-            title: Text('Users'),
-            activeColor: Colors.purpleAccent,
+            icon: Icon(Icons.search),
+            title: Text('Discover'),
+            activeColor: Colors.green,
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.message),
-            title: Text('Messages'),
+            icon: Icon(Icons.save),
+            title: Text('Watchlist'),
             activeColor: Colors.pink,
           ),
           BottomNavyBarItem(
             icon: Icon(Icons.settings),
-            title: Text('Settings'),
+            title: Text('Profile'),
             activeColor: Colors.blue,
           ),
         ],
