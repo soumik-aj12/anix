@@ -241,10 +241,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 itemCount: animeList.length,
                 itemBuilder: (context, index) {
                   final anime = animeList[index];
-
+                  // print(anime['data']['mal_id']);
                   return GestureDetector(
                     onTap: () {
-                      context.go('/anime/${anime['id']}');
+                      context.go('/discover/${anime['mal_id']}');
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

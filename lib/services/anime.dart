@@ -21,4 +21,22 @@ class animeService {
       return [];
     }
   }
+
+  Future<Map<String, dynamic>?> fetchAnimeById(String id) async {
+    try {
+      final url = 'https://api.jikan.moe/v4/anime/$id';
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return data['data'];
+      } else {
+        throw Exception(
+          'Failed to fetch anime. Status Code: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
 }

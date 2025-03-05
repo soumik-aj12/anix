@@ -1,6 +1,7 @@
 import 'package:anix/firebase_options.dart';
 import 'package:anix/ui/Authentication/Login.dart';
 import 'package:anix/ui/Authentication/Register.dart';
+import 'package:anix/ui/Discover/AnimeDetail.dart';
 import 'package:anix/ui/Intro.dart';
 import 'package:anix/ui/Main.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -30,5 +31,12 @@ final GoRouter _router = GoRouter(
     GoRoute(path: '/login', builder: (context, state) => LoginScreen()),
     GoRoute(path: '/signup', builder: (context, state) => RegisterScreen()),
     GoRoute(path: '/home', builder: (context, state) => MainScreen()),
+    GoRoute(
+      path: '/discover/:id',
+      builder: (context, state) {
+        final id = state.pathParameters['id'];
+        return AnimeDetailScreen(id: id);
+      },
+    ),
   ],
 );
