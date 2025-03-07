@@ -1,0 +1,27 @@
+{
+    "configurations": [
+      {
+        "type": "dart",
+        "request": "launch",
+        "name": "Launch Flutter App",
+        "program": "${workspaceFolder}/${input:entryPoint}",
+        "cwd": "${workspaceFolder}",
+        "deviceId": "${input:deviceId}",
+        "console": "debugConsole",
+        "enableAsserts": true,
+        "flutterMode": "debug"
+      }
+    ],
+    "inputs": [
+      {
+        "type": "promptString",
+        "id": "entryPoint",
+        "description": "Path to the entry script (e.g., lib/main.dart)"
+      },
+      {
+        "type": "promptString",
+        "id": "deviceId",
+        "description": "ID of the device to launch your Flutter app on"
+      }
+    ]
+  }

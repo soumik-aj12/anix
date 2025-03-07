@@ -54,6 +54,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       final url = Uri.parse("https://api.jikan.moe/v4/anime?q=$query&limit=5");
       final response = await http.get(url);
 
+      // Check if widget is still mounted before calling setState
+      if (!mounted) return;
+
       if (response.statusCode == 200) {
         setState(() {
           suggestions = json.decode(response.body)['data'];
@@ -64,6 +67,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       }
     } catch (e) {
       print("Error fetching suggestions: $e");
+      // Check if widget is still mounted before calling setState
+      if (!mounted) return;
+
       setState(() {
         isLoading = false;
       });
@@ -74,6 +80,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     final url = Uri.parse("https://api.jikan.moe/v4/anime?limit=5");
     final response = await http.get(url);
 
+    // Check if widget is still mounted before calling setState
+    if (!mounted) return;
+
     if (response.statusCode == 200) {
       setState(() {
         animeList = json.decode(response.body)['data'].take(6).toList();
@@ -83,22 +92,17 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     }
   }
 
-  void performSearch(String query) {
-    if (query.isEmpty) return;
-    setState(() {
-      isSearching = true;
-      suggestions = [];
-    });
-    searchAnime(query);
-  }
-
-  Future<void> searchAnime(String anime) async {
+  Future<void> performSearch(String anime) async {
     setState(() {
       isLoading = true;
     });
+
     try {
       final url = Uri.parse("https://api.jikan.moe/v4/anime?q=$anime");
       final response = await http.get(url);
+
+      // Check if widget is still mounted before calling setState
+      if (!mounted) return;
 
       if (response.statusCode == 200) {
         setState(() {
@@ -111,6 +115,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       }
     } catch (e) {
       print("Error fetching anime: $e");
+
+      // Check if widget is still mounted before calling setState
+      if (!mounted) return;
+
       setState(() {
         isLoading = false;
         isSearching = false;
